@@ -10,7 +10,7 @@ require("dotenv").config();
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://medium-blog-app-pi.vercel.app"],
+    origin: ["http://localhost:3000", "https://propftx-frontend.vercel.app/"],
     credentials: true,
   })
 );
