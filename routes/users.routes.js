@@ -53,19 +53,26 @@ userRouter.post("/signup", async (req, res) => {
 userRouter.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await UserModel.findOne({ email });
-  console.log(user);
-  const hashed_password = user?.password;
-  bcrypt.compare(password, hashed_password, async function (err, result) {
-    if (result) {
-      const token = jwt.sign({ userId: user._id }, "secretkey");
-      console.log(token);
-
-      res.send({ msg: "login successful", token });
-    } else {
-      res.send({ msg: "Wrong Login Credentials" });
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      res.status(404).send({ msg: "user not found" });
     }
-  });
+    const hashed_password = user?.password;
+    bcrypt.compare(password, hashed_password, async function (err, result) {
+      if (result) {
+        const token = jwt.sign({ userId: user._id }, "secretkey");
+        console.log(token);
+
+        res.send({ msg: "login successful", token });
+      } else {
+        res.send({ msg: "Wrong Login Credentials" });
+      }
+    });
+    console.log(user);
+  } catch (error) {
+    res.status(500).send({ msg: "internal server error" });
+  }
 });
 
 module.exports = { userRouter };
