@@ -1,7 +1,6 @@
 const express = require("express");
-
 const app = express();
-
+const cors = require("cors");
 const { connection } = require("./config/db");
 const { movieRouter } = require("./routes/movies.routes");
 const { userRouter } = require("./routes/users.routes");
@@ -9,7 +8,12 @@ const { userRouter } = require("./routes/users.routes");
 require("dotenv").config();
 
 app.use(express.json());
-
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://medium-blog-app-pi.vercel.app"],
+    credentials: true,
+  })
+);
 app.get("/", (req, res) => {
   res.send("api started");
 });

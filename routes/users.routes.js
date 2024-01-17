@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 
 const userRouter = express.Router();
 
-userRouter.get("/", authenticate, async (req, res) => {
+userRouter.get("/user", authenticate, async (req, res) => {
   try {
     const user = await UserModel.findOne({ _id: req.userId });
     console.log(user);
@@ -35,7 +35,7 @@ userRouter.post("/signup", async (req, res) => {
   const user = await UserModel.findOne({ email });
   image = image
     ? image
-    : "https://firebasestorage.googleapis.com/v0/b/instagram-clone-db.appspot.com/o/circle-silhouette-user-user-profile-user-interface-login-avatar-user-account-skin-png-clipart-thumbnail-removebg-preview.png?alt=media&token=0cd8d27e-b2a8-4d23-baa8-c068b7db7c97";
+    : "https://cdn.vectorstock.com/i/preview-1x/85/94/person-gray-photo-placeholder-man-silhouette-sign-vector-23838594.jpg";
   if (user) return res.status(400).send({ msg: "user already exist" });
   else {
     bcrypt.hash(password, 10, async function (err, hash) {
@@ -63,7 +63,7 @@ userRouter.post("/login", async (req, res) => {
 
       res.send({ msg: "login successful", token });
     } else {
-      res.send("login failed");
+      res.send({ msg: "Wrong Login Credentials" });
     }
   });
 });

@@ -11,7 +11,7 @@ const MovieSchema = mongoose.Schema(
     overview: String,
     popularity: Number,
     poster_path: { type: String, required: true },
-    release_date: { type: String, required: true },
+    release_date: { type: Date, required: true },
     title: { type: String, required: true },
     likedBy: Array,
     video: Boolean,
