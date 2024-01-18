@@ -7,7 +7,6 @@ const { userRouter } = require("./routes/users.routes");
 
 require("dotenv").config();
 
-app.use(express.json());
 app.use(
   cors({
     origin: [
@@ -15,9 +14,13 @@ app.use(
       "https://propftx-frontend.vercel.app",
       "https://proptfx-frontend.vercel.app",
     ],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
   })
 );
+app.options("*", cors());
+app.use(express.json());
+
 app.get("/", (req, res) => {
   res.send("api started");
 });
