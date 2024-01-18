@@ -22,7 +22,7 @@ userRouter.get("/:userId", async (req, res) => {
     const { userId } = req.params;
     console.log(userId);
     const user = await UserModel.findOne({ _id: userId });
-    if (!user) return res.send({ msg: "user does not exist" });
+    if (!user) return res.status(404).send({ msg: "user does not exist" });
     console.log(user);
     res.send(user);
   } catch (err) {
@@ -56,7 +56,7 @@ userRouter.post("/login", async (req, res) => {
   try {
     const user = await UserModel.findOne({ email });
     if (!user) {
-      res.status(404).send({ msg: "user not found" });
+      return res.status(404).send({ msg: "user not found" });
     }
     const hashed_password = user?.password;
     bcrypt.compare(password, hashed_password, async function (err, result) {
@@ -64,12 +64,12 @@ userRouter.post("/login", async (req, res) => {
         const token = jwt.sign({ userId: user._id }, "secretkey");
         console.log(token);
 
-        res.send({ msg: "login successful", token });
+        return res.send({ msg: "login successful", token });
       } else {
-        res.send({ msg: "Wrong Login Credentials" });
+        return res.status(404).send({ msg: "Wrong Login Credentials" });
       }
     });
-    console.log(user);
+    // console.log(user);
   } catch (error) {
     res.status(500).send({ msg: "internal server error" });
   }
